@@ -1,108 +1,135 @@
 <!doctype html>
 <html lang="id">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Simulasi Kristal Trigonal</title>
-	<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulasi Kristal Trigonal</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-	<header>
-		<h1>Simulasi Kristal Trigonal</h1>
-		<p class="subtitle">Interaktif — ubah parameter kisi untuk melihat struktur 3D</p>
-	</header>
+  <header>
+    <h1>Simulasi Kristal Trigonal</h1>
+    <p class="subtitle">
+      Visualisasi interaktif struktur kristal trigonal dengan label sumbu, sudut, atom, dan parameter kisi.
+    </p>
+  </header>
 
-	<main>
-		<div id="viewer">
-			<canvas id="c"></canvas>
-		</div>
+  <main>
+    <div id="viewer">
+      <canvas id="c"></canvas>
 
-		<aside id="controls">
-			<h2>Kontrol</h2>
+      <div class="legend">
+        <h3>Legenda</h3>
+        <p><span class="dot gold"></span> Atom A</p>
+        <p><span class="dot blue"></span> Atom B</p>
+        <p><span class="line-sample"></span> Garis sel satuan</p>
+        <p><span class="axis-sample"></span> Sumbu kristal</p>
+      </div>
+    </div>
 
-			<div id="infoBar">
-				<span><strong>Kisi trigonal</strong></span>
-				<span id="siteStatus">A=3.00 Å, C=5.00 Å, α=90°, β=90°, γ=120°</span>
-			</div>
+    <aside id="controls">
+      <h2>Kontrol</h2>
 
-			<label>A (Å)
-				<input id="aRange" type="range" min="1" max="5" step="0.1" value="3">
-				<span id="aVal">3.00</span>
-			</label>
+      <div id="infoBar">
+        <span><strong>Kisi trigonal</strong></span>
+        <span id="siteStatus">
+          A=3.00 Å, C=5.00 Å, α=90°, β=90°, γ=120°
+        </span>
+      </div>
 
-			<label>C (Å)
-				<input id="cRange" type="range" min="1" max="8" step="0.1" value="5">
-				<span id="cVal">5.00</span>
-			</label>
+      <label>A (Å)
+        <input id="aRange" type="range" min="1" max="5" step="0.1" value="3">
+        <span id="aVal">3.00</span>
+      </label>
 
-			<label>Alpha / α (°)
-				<input id="alphaRange" type="range" min="60" max="120" step="1" value="90">
-				<span id="alphaVal">90</span>
-			</label>
+      <label>C (Å)
+        <input id="cRange" type="range" min="1" max="8" step="0.1" value="5">
+        <span id="cVal">5.00</span>
+      </label>
 
-			<label>Beta / β (°)
-				<input id="betaRange" type="range" min="60" max="120" step="1" value="90">
-				<span id="betaVal">90</span>
-			</label>
+      <label>Alpha / α (°)
+        <input id="alphaRange" type="range" min="60" max="120" step="1" value="90">
+        <span id="alphaVal">90</span>
+      </label>
 
-			<label>Gamma / γ (°)
-				<input id="gammaRange" type="range" min="60" max="120" step="1" value="120">
-				<span id="gammaVal">120</span>
-			</label>
+      <label>Beta / β (°)
+        <input id="betaRange" type="range" min="60" max="120" step="1" value="90">
+        <span id="betaVal">90</span>
+      </label>
 
-			<label>Atom radius
-				<input id="rRange" type="range" min="0.05" max="0.6" step="0.01" value="0.18">
-				<span id="rVal">0.18</span>
-			</label>
+      <label>Gamma / γ (°)
+        <input id="gammaRange" type="range" min="60" max="120" step="1" value="120">
+        <span id="gammaVal">120</span>
+      </label>
 
-			<label>
-				<input id="showCell" type="checkbox" checked>
-				Tampilkan sel satuan
-			</label>
+      <label>Atom radius
+        <input id="rRange" type="range" min="0.05" max="0.6" step="0.01" value="0.18">
+        <span id="rVal">0.18</span>
+      </label>
 
-			<label>
-				<input id="showAtoms" type="checkbox" checked>
-				Tampilkan atom
-			</label>
+      <label>
+        <input id="showCell" type="checkbox" checked>
+        Tampilkan sel satuan
+      </label>
 
-			<label>
-				<input id="showPlanes" type="checkbox" checked>
-				Tampilkan bidang sel
-			</label>
+      <label>
+        <input id="showAtoms" type="checkbox" checked>
+        Tampilkan atom
+      </label>
 
-			<label>
-				<input id="showAxes" type="checkbox" checked>
-				Tampilkan sumbu
-			</label>
+      <label>
+        <input id="showPlanes" type="checkbox" checked>
+        Tampilkan bidang sel
+      </label>
 
-			<label>
-				<input id="showGrid" type="checkbox" checked>
-				Tampilkan grid lantai
-			</label>
+      <label>
+        <input id="showAxes" type="checkbox" checked>
+        Tampilkan sumbu
+      </label>
 
-			<div class="controls-row">
-				<button id="resetBtn">Reset view</button>
-				<button id="downloadBtn">Unduh PNG</button>
-			</div>
+      <label>
+        <input id="showGrid" type="checkbox" checked>
+        Tampilkan grid lantai
+      </label>
 
-			<div class="params">
-				<strong>Parameter kisi</strong>
-				<p>
-					A = <span id="dispA">3.00</span> Å •
-					C = <span id="dispC">5.00</span> Å •
-					α = <span id="dispAlpha">90</span>° •
-					β = <span id="dispBeta">90</span>° •
-					γ = <span id="dispGamma">120</span>° •
-					r = <span id="dispR">0.18</span>
-				</p>
-			</div>
+      <label>
+        <input id="showLabels" type="checkbox" checked>
+        Tampilkan label sumbu, sudut, dan atom
+      </label>
 
-			<p class="credits">Gunakan mouse untuk memutar/zoom, dan kontrol di atas untuk mengubah kisi.</p>
-		</aside>
-	</main>
+      <div class="controls-row">
+        <button id="resetBtn">Reset view</button>
+        <button id="downloadBtn">Unduh PNG</button>
+      </div>
 
-	<script src="three.min.js"></script>
-	<script src="OrbitControls.js"></script>
-	<script src="script.js"></script>
+      <div class="params">
+        <strong>Parameter kisi</strong>
+        <p>
+          A = <span id="dispA">3.00</span> Å •
+          C = <span id="dispC">5.00</span> Å •
+          α = <span id="dispAlpha">90</span>° •
+          β = <span id="dispBeta">90</span>° •
+          γ = <span id="dispGamma">120</span>° •
+          r = <span id="dispR">0.18</span>
+        </p>
+      </div>
+
+      <div class="explain">
+        <strong>Keterangan</strong>
+        <p>A dan C menunjukkan panjang kisi kristal dalam satuan Ångström.</p>
+        <p>α, β, dan γ menunjukkan sudut antar sumbu pada sel satuan kristal.</p>
+        <p>Atom radius digunakan untuk mengatur ukuran tampilan atom.</p>
+      </div>
+
+      <p class="credits">
+        Gunakan mouse untuk memutar, zoom, dan menggeser tampilan kristal.
+      </p>
+    </aside>
+  </main>
+
+  <script src="three.min.js"></script>
+  <script src="OrbitControls.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
